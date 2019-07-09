@@ -4,6 +4,8 @@
 # VS Code
 .vscode/*
 
+# VS
+.vs/*
 # asp.net core
 [Bb]in/
 [Oo]bj/
