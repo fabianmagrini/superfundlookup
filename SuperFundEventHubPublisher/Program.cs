@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using SuperFundBlobStorage;
+using Newtonsoft.Json;
 
 namespace SuperFundEventHubPublisher
 {
@@ -20,11 +22,15 @@ namespace SuperFundEventHubPublisher
             IConfigurationRoot configuration = builder.Build();
             var eventHubConfig = new EventHubConfig();
             configuration.GetSection("EventHubConfig").Bind(eventHubConfig);
+
+            var blobStorageConnectionString = configuration.GetSection("SuperFundBlobStorage:ConnectionString").Value;
+            repository = new SuperFundBlobStorageRespository(new SuperFundBlobStorageSettings(blobStorageConnectionString));
             
             MainAsync(eventHubConfig).GetAwaiter().GetResult();
         }
 
         private static EventHubClient eventHubClient;
+        private static SuperFundBlobStorageRespository repository;
 
         private static async Task MainAsync(EventHubConfig eventHubConfig)
         {
@@ -38,8 +44,34 @@ namespace SuperFundEventHubPublisher
 
             eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
 
-            await SendMessagesToEventHub(100);
+            var blob = repository.GetStringFromBlobStorage("superfundcontainer", "SflUsiExtract.csv");
 
+            int lineCount = 0;  
+            foreach (string row in blob.Split('\n'))  
+            {  
+                if (!string.IsNullOrEmpty(row))  
+                {  
+                     if (lineCount > 0) {
+                        string[] cells = row.Split('|');
+
+                        var superFund = new SuperFund();
+                        superFund.ABN = cells[0];
+                        superFund.FundName = cells[1];
+                        superFund.USI = cells[2];
+                        superFund.ProductName = cells[3];
+                        superFund.ContributionRestrictions = cells[4];
+                        superFund.FromDate = cells[5];
+                        superFund.ToDate = cells[6];
+                        
+                        Console.WriteLine(superFund.ToString());
+
+                        await SendMessagesToEventHub(JsonConvert.SerializeObject(superFund));
+                     }
+
+                     lineCount++;
+                }  
+            }
+            
             await eventHubClient.CloseAsync();
 
             Console.WriteLine("Press ENTER to exit.");
@@ -47,25 +79,16 @@ namespace SuperFundEventHubPublisher
         }
 
         // Creates an event hub client and sends 100 messages to the event hub.
-        private static async Task SendMessagesToEventHub(int numMessagesToSend)
+        private static async Task SendMessagesToEventHub(string message)
         {
-            for (var i = 0; i < numMessagesToSend; i++)
+            try
             {
-                try
-                {
-                    var message = $"Message {i}";
-                    Console.WriteLine($"Sending message: {message}");
-                    await eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine($"{DateTime.Now} > Exception: {exception.Message}");
-                }
-
-                await Task.Delay(10);
+                await eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
             }
-
-            Console.WriteLine($"{numMessagesToSend} messages sent.");
+            catch (Exception exception)
+            {
+                Console.WriteLine($"{DateTime.Now} > Exception: {exception.Message}");
+            }
         }
     }
 }
