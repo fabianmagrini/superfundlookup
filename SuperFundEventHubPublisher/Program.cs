@@ -87,7 +87,7 @@ namespace SuperFundEventHubPublisher
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"{DateTime.Now} > Exception: {exception.Message}");
+                Console.WriteLine($"{DateTime.Now} > Exception: {exception.Message}\n{exception.StackTrace}");
             }
         }
     }
