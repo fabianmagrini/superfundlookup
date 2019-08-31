@@ -14,5 +14,5 @@ steps:
   inputs:
     containerRegistry: 'superfundcontainerregistry'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: '**/SuperFundAPI/Dockerfile'
     repository: 'superfundtest'
