@@ -1,6 +1,6 @@
 # SuperFund AKS
 
-Azure Kubernetes Service 
+Azure Kubernetes Service
 
 References:
 <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough>
@@ -21,6 +21,7 @@ chmod 775 setup.sh
 ## Connect to the cluster
 
 ### Install kubectl locally
+
 ```sh
 az aks install-cli
 ```
@@ -48,9 +49,11 @@ kubectl apply -f azure-vote.yaml
 ```
 
 ### Test the application
+
 When the application runs, a Kubernetes service exposes the application front end to the internet. This process can take a few minutes to complete.
 
 To monitor progress, use the kubectl get service command with the --watch argument.
+
 ```sh
 kubectl get service azure-vote-front --watch
 ```

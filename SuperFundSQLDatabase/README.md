@@ -1,6 +1,6 @@
 # SuperFund Azure SQL Database
 
-Azure SQL Single Database 
+Azure SQL Single Database
 
 References:
 <https://docs.microsoft.com/en-us/azure/sql-database/scripts/sql-database-create-and-configure-database-cli>
@@ -17,7 +17,6 @@ az group delete --name $resourceGroupName
 
 References:
 <https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-develop-use-vscode?view=sql-server-2017>
-
 
 ## Create C# apps using SQL Server on macOS
 
