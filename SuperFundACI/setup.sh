@@ -4,13 +4,13 @@
 #az account set --subscription <replace with your subscription name or id>
 
 # Modify for your environment.
-# SERVICE_PRINCIPAL_NAME: Must be unique within your AD tenant
+environmentID=$RANDOM
 containerRegistryName=SuperFundContainerRegistry
 keyVaultName=SuperFundKV
-servicePrincipleName=superfund-acr-service-principal
+servicePrincipleName=superfund-acr-sp-$environmentID
 
 # Set the resource group name and location for your server
-resourceGroupName=superfund-rg-aci-$RANDOM
+resourceGroupName=superfund-rg-aci-$environmentID
 location=australiaeast
 
 # Create a resource group
@@ -60,7 +60,9 @@ az keyvault secret set \
     --value $SP_APP_ID
 
 export ACR_LOGIN_SERVER=$(az acr show --name $containerRegistryName --resource-group $resourceGroupName --query "loginServer" --output tsv)
+echo "environmentID: $environmentID"
+echo "resourceGroupName: $resourceGroupName"
 echo "ACR_LOGIN_SERVER: $ACR_LOGIN_SERVER"
-echo "KV name: $keyVaultName"
+echo "keyVaultName: $keyVaultName"
 echo "KV secret name for username: $servicePrincipleName-usr"
 echo "KV secret name for password: $servicePrincipleName-pwd"
