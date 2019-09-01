@@ -14,5 +14,6 @@ steps:
   inputs:
     containerRegistry: 'superfundcontainerregistry'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    repository: 'superfundtest'
+    buildContext: '$(Build.Repository.LocalPath)'
+    Dockerfile: 'SuperFundAPI/Dockerfile'
+    repository: 'superfundapi'
