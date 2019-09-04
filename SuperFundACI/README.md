@@ -32,9 +32,7 @@ SuperFund API uses Table Storage. Store the secrets in Azure KeyVault that are l
 
 ```sh
 keyVaultName=<key vault name>
-az keyvault secret set --vault-name $keyVaultName --name "SuperFundApi--StorageAccount" --value "..."
-az keyvault secret set --vault-name $keyVaultName --name "SuperFundApi--StorageKey" --value "..."
-az keyvault secret set --vault-name $keyVaultName --name "SuperFundApi--TableName" --value "..."
+az keyvault secret set --vault-name $keyVaultName --name "SuperFundApiStorageKey" --value "..."
 ```
 
 ## create azure container instance

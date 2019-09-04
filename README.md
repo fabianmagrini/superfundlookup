@@ -23,17 +23,44 @@ dotnet test SuperFundCLI.Tests/SuperFundCLI.Tests.csproj
 
 ## SuperFund API
 
-### setting secrets for dev
+How to deploy chnage to AKS
+
+### settings
 
 ```sh
-dotnet user-secrets set "SuperFundApi:StorageAccount" "..."
-dotnet user-secrets set "SuperFundApi:StorageKey" "..."
-dotnet user-secrets set "SuperFundApi:TableName" "..."
+containerRegistryName=...
+az acr login --name $containerRegistryName
+az acr repository list --name $containerRegistryName --output table
 ```
 
-### run api
+### build docker container
 
 ```sh
-cd SuperFundAPI
-dotnet run
+ACR_LOGIN_SERVER=...
+docker build -t superfundapi . -f SuperFundAPI/Dockerfile
+docker tag superfundapi $ACR_LOGIN_SERVER/superfundapi:latest
+docker push $ACR_LOGIN_SERVER/superfundapi:v1
+```
+
+### set keyvault values
+
+```sh
+keyVaultName=...
+az keyvault secret set --vault-name $keyVaultName --name "SuperFundApiStorageKey" --value "..."
+```
+
+### Run deployment
+
+```sh
+cd SuperFundAKS
+chmod 775 deploy.sh
+export subscriptionid="..."
+export tenantid="..."
+source ./deploy.sh aks-superfundapi.yaml.template
+```
+
+### Scale deployment
+
+```sh
+kubectl scale deployment supefundapi --replicas=1
 ```

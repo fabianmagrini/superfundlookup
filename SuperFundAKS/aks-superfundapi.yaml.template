@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: supefundapi
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: supefundapi-kub-app
+    spec:
+      containers:
+        - name: supefundapi-services-app
+          image: superfundcontainerregistry.azurecr.io/superfundapi:latest
+          ports:
+            - containerPort: 80   
+          volumeMounts:
+            - name: kvvolume 
+              mountPath: /kv 
+              readOnly: true 
+      volumes:
+        - name: kvvolume 
+          flexVolume: 
+            driver: "azure/kv" 
+            secretRef:
+              name: kvcreds
+            options: 
+              usepodidentity: "false" 
+              keyvaultname: "SuperFundKV" 
+              keyvaultobjectnames: "SuperFundApiStorageKey" 
+              keyvaultobjecttypes: "secret" 
+              resourcegroup: "SuperfundLookupRG" 
+              subscriptionid: "{{subscriptionid}}" 
+              tenantid: "{{tenantid}}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: supefundapi-kub-app
+spec:
+  ports:
+    - name: http-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: supefundapi-kub-app
+  type: LoadBalancer      

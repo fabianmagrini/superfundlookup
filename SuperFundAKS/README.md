@@ -3,13 +3,23 @@
 Azure Kubernetes Service
 
 References:
+
 <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough>
 <https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal>
 <https://docs.microsoft.com/en-us/azure/dev-spaces/quickstart-netcore>
+<https://docs.microsoft.com/en-us/azure/aks/update-credentials>
 
 <https://azure.microsoft.com/en-gb/topic/what-is-kubernetes>
 <https://azure.microsoft.com/en-gb/services/kubernetes-service>
 <https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app>
+
+<https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster>
+<https://docs.microsoft.com/en-us/dotnet/architecture/containerized-lifecycle/design-develop-containerized-apps/build-aspnet-core-applications-linux-containers-aks-kubernetes>
+
+<https://docs.microsoft.com/en-us/azure/aks/faq>
+<https://docs.microsoft.com/en-us/azure/aks/developer-best-practices-pod-security>
+<https://github.com/Azure/aad-pod-identity>
+<https://github.com/Azure/kubernetes-keyvault-flexvol>
 
 ## Run deployment
 
@@ -42,10 +52,17 @@ kubectl get nodes
 
 ## Run the application
 
-Try out the yaml for the azure vote application from here <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough>.
+The yaml for the application was inspired from here <https://docs.microsoft.com/en-us/dotnet/architecture/containerized-lifecycle/design-develop-containerized-apps/build-aspnet-core-applications-linux-containers-aks-kubernetes>.
+
+Uses flexvol for integration to KeyVault <https://github.com/Azure/kubernetes-keyvault-flexvol>.
+
+Created a simple deploy script to substitute some variables into a template yaml for the deployment.
 
 ```sh
-kubectl apply -f azure-vote.yaml
+chmod 775 deploy.sh
+export subscriptionid="..."
+export tenantid="..."
+source ./deploy.sh aks-superfundapi.yaml.template
 ```
 
 ### Test the application
@@ -55,7 +72,13 @@ When the application runs, a Kubernetes service exposes the application front en
 To monitor progress, use the kubectl get service command with the --watch argument.
 
 ```sh
-kubectl get service azure-vote-front --watch
+kubectl get service supefundapi-kub-app --watch
+```
+
+### List pods
+
+```sh
+kubectl get pods
 ```
 
 ## Start the Kubernetes dashboard

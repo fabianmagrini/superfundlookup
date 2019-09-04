@@ -7,9 +7,7 @@
 ## setting secrets for dev
 
 ```sh
-dotnet user-secrets set "SuperFundApi:StorageAccount" "..."
-dotnet user-secrets set "SuperFundApi:StorageKey" "..."
-dotnet user-secrets set "SuperFundApi:TableName" "..."
+dotnet user-secrets set "SuperFundApiStorageKey" "..."
 ```
 
 ## run api

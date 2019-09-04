@@ -30,9 +30,9 @@ namespace SuperFundAPI
             {
                 return new SuperFundLookupRepository<SuperFundEntity>(
                     new SuperFundTableSettings(
-                        storageAccount: Configuration["SuperFundApi:StorageAccount"],
-                        storageKey: Configuration["SuperFundApi:StorageKey"],
-                        tableName: Configuration["SuperFundApi:TableName"]));
+                        storageAccount: Configuration["SuperFundApiStorageAccount"],
+                        storageKey: Configuration["SuperFundApiStorageKey"],
+                        tableName: Configuration["SuperFundApiTableName"]));
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
