@@ -24,3 +24,7 @@ if [ $? -ne 0 ]
 then
   az keyvault create --name $keyVaultName --resource-group $resourceGroupName --location $location
 fi
+
+# Create the blob storage
+./setup-blobstorage.sh $resourceGroupName
+./setup-tablestorage.sh $resourceGroupName

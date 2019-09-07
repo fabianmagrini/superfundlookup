@@ -6,6 +6,19 @@ POC using Azure
 
 .Net Core 2.2
 
+## Setup Azure Environment
+
+For instructions on setting up the Azure Environment see [SuperFundEnvironment/](here)
+
+## Azure Blob Storage
+
+The POC uses files stored in Azure Blob Storage in some cases. The references below will be helpful when uploading files.
+
+References:
+
+<https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-cli>
+<https://docs.microsoft.com/en-us/cli/azure/storage/account?view=azure-cli-latest#az-storage-account-show>
+
 ## SuperFund CLI
 
 ### Running CLI

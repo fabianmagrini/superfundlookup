@@ -10,7 +10,7 @@ References:
 ## Run deployment
 
 ```sh
-chmod 775 setup.sh
+chmod 775 *.sh
 ./setup.sh
 ```
 
