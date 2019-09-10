@@ -4,22 +4,21 @@ Azure Kubernetes Service
 
 References:
 
-<https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough>
-<https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal>
-<https://docs.microsoft.com/en-us/azure/dev-spaces/quickstart-netcore>
-<https://docs.microsoft.com/en-us/azure/aks/update-credentials>
+* <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough>
+* <https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal>
+* <https://docs.microsoft.com/en-us/azure/dev-spaces/quickstart-netcore>
+* <https://docs.microsoft.com/en-us/azure/aks/update-credentials>
+* <https://azure.microsoft.com/en-gb/topic/what-is-kubernetes>
+* <https://azure.microsoft.com/en-gb/services/kubernetes-service>
+* <https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app>
 
-<https://azure.microsoft.com/en-gb/topic/what-is-kubernetes>
-<https://azure.microsoft.com/en-gb/services/kubernetes-service>
-<https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app>
+* <https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster>
+* <https://docs.microsoft.com/en-us/dotnet/architecture/containerized-lifecycle/design-develop-containerized-apps/build-aspnet-core-applications-linux-containers-aks-kubernetes>
 
-<https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster>
-<https://docs.microsoft.com/en-us/dotnet/architecture/containerized-lifecycle/design-develop-containerized-apps/build-aspnet-core-applications-linux-containers-aks-kubernetes>
-
-<https://docs.microsoft.com/en-us/azure/aks/faq>
-<https://docs.microsoft.com/en-us/azure/aks/developer-best-practices-pod-security>
-<https://github.com/Azure/aad-pod-identity>
-<https://github.com/Azure/kubernetes-keyvault-flexvol>
+* <https://docs.microsoft.com/en-us/azure/aks/faq>
+* <https://docs.microsoft.com/en-us/azure/aks/developer-best-practices-pod-security>
+* <https://github.com/Azure/aad-pod-identity>
+* <https://github.com/Azure/kubernetes-keyvault-flexvol>
 
 ## Run deployment
 

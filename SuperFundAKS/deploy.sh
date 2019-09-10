@@ -19,5 +19,4 @@ template=`cat "$deployYamlTemplate" | sed "s/{{subscriptionid}}/$subscriptionid/
 template=`echo "$template" | sed "s/{{tenantid}}/$tenantid/g"`
 
 # apply the yaml with the substituted values
-#echo "$template" | kubectl apply -f -
-echo "$template" 
+echo "$template" | kubectl apply -f -
