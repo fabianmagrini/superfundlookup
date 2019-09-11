@@ -19,6 +19,7 @@ References:
 * <https://docs.microsoft.com/en-us/azure/aks/developer-best-practices-pod-security>
 * <https://github.com/Azure/aad-pod-identity>
 * <https://github.com/Azure/kubernetes-keyvault-flexvol>
+* <https://docs.microsoft.com/en-us/azure/aks/use-network-policies>
 
 ## Run deployment
 

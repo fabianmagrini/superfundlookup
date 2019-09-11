@@ -52,7 +52,7 @@ az acr repository list --name $containerRegistryName --output table
 ACR_LOGIN_SERVER=...
 docker build -t superfundapi . -f SuperFundAPI/Dockerfile
 docker tag superfundapi $ACR_LOGIN_SERVER/superfundapi:latest
-docker push $ACR_LOGIN_SERVER/superfundapi:v1
+docker push $ACR_LOGIN_SERVER/superfundapi:latest
 ```
 
 ### set keyvault values
