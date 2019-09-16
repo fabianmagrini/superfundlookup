@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SuperFundCLI": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
