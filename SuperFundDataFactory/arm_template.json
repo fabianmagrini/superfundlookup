@@ -1,0 +1,244 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": {
+                "description": "Data Factory Name"
+            },
+            "defaultValue": "superfundDF"
+        },
+        "factoryLocation":{  
+            "type":"string",
+            "defaultValue":"australiaeast",
+            "metadata":{  
+                "description":"Location of the data factory."
+            }
+        },
+        "AzureBlobStorage1_connectionString": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+            }
+        },
+        "superfundblobstorage_connectionString": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Secure string for 'connectionString' of 'superfundblobstorage'"
+            }
+        },
+        "superfundtablestorage_connectionString": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Secure string for 'connectionString' of 'superfundtablestorage'"
+            }
+        },
+        "AzureBlob1_properties_typeProperties_fileName": {
+            "type": "string",
+            "defaultValue": "SflUsiExtract.csv"
+        },
+        "AzureBlob1_properties_typeProperties_folderPath": {
+            "type": "string",
+            "defaultValue": "superfundcontainer"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name":"[parameters('factoryName')]",
+                    "apiVersion":"2018-06-01",
+                    "type":"Microsoft.DataFactory/factories",
+                    "location":"[parameters('factoryLocation')]",
+                    "identity":{  
+                        "type":"SystemAssigned"
+                    },
+            "resources": [
+                {
+                    "name": "[concat(parameters('factoryName'), '/pipeline1')]",
+                    "type": "Microsoft.DataFactory/factories/pipelines",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "activities": [
+                            {
+                                "name": "Copy Data1",
+                                "type": "Copy",
+                                "dependsOn": [],
+                                "policy": {
+                                    "timeout": "7.00:00:00",
+                                    "retry": 0,
+                                    "retryIntervalInSeconds": 30,
+                                    "secureOutput": false,
+                                    "secureInput": false
+                                },
+                                "userProperties": [],
+                                "typeProperties": {
+                                    "source": {
+                                        "type": "BlobSource",
+                                        "recursive": true
+                                    },
+                                    "sink": {
+                                        "type": "AzureTableSink",
+                                        "azureTableInsertType": "merge",
+                                        "writeBatchSize": 10000
+                                    },
+                                    "enableStaging": false
+                                },
+                                "inputs": [
+                                    {
+                                        "referenceName": "AzureBlob1",
+                                        "type": "DatasetReference",
+                                        "parameters": {}
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "referenceName": "AzureTable1",
+                                        "type": "DatasetReference",
+                                        "parameters": {}
+                                    }
+                                ]
+                            }
+                        ],
+                        "annotations": []
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]",
+                        "[concat(variables('factoryId'), '/datasets/AzureBlob1')]",
+                        "[concat(variables('factoryId'), '/datasets/AzureTable1')]"
+                    ]
+                },
+                {
+                    "name": "[concat(parameters('factoryName'), '/AzureBlob1')]",
+                    "type": "Microsoft.DataFactory/factories/datasets",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "linkedServiceName": {
+                            "referenceName": "superfundblobstorage",
+                            "type": "LinkedServiceReference"
+                        },
+                        "annotations": [],
+                        "type": "AzureBlob",
+                        "structure": [
+                            {
+                                "name": "ABN",
+                                "type": "String"
+                            },
+                            {
+                                "name": "FundName",
+                                "type": "String"
+                            },
+                            {
+                                "name": "USI",
+                                "type": "String"
+                            },
+                            {
+                                "name": "ProductName",
+                                "type": "String"
+                            },
+                            {
+                                "name": "ContributionRestrictions",
+                                "type": "String"
+                            },
+                            {
+                                "name": "From",
+                                "type": "String"
+                            },
+                            {
+                                "name": "To",
+                                "type": "String"
+                            }
+                        ],
+                        "typeProperties": {
+                            "format": {
+                                "type": "TextFormat",
+                                "columnDelimiter": "|",
+                                "rowDelimiter": "\n",
+                                "quoteChar": "\"",
+                                "nullValue": "\\N",
+                                "encodingName": null,
+                                "treatEmptyAsNull": true,
+                                "skipLineCount": 0,
+                                "firstRowAsHeader": true
+                            },
+                            "fileName": "[parameters('AzureBlob1_properties_typeProperties_fileName')]",
+                            "folderPath": "[parameters('AzureBlob1_properties_typeProperties_folderPath')]"
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]",
+                        "[concat(variables('factoryId'), '/linkedServices/superfundblobstorage')]"
+                    ]
+                },
+                {
+                    "name": "[concat(parameters('factoryName'), '/AzureTable1')]",
+                    "type": "Microsoft.DataFactory/factories/datasets",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "linkedServiceName": {
+                            "referenceName": "superfundtablestorage",
+                            "type": "LinkedServiceReference"
+                        },
+                        "annotations": [],
+                        "type": "AzureTable",
+                        "schema": [],
+                        "typeProperties": {
+                            "tableName": "SuperfundTable"
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]",
+                        "[concat(variables('factoryId'), '/linkedServices/superfundtablestorage')]"
+                    ]
+                },
+                {
+                    "name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureBlobStorage",
+                        "typeProperties": {
+                            "connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]"
+                    ]
+                },
+                {
+                    "name": "[concat(parameters('factoryName'), '/superfundblobstorage')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureBlobStorage",
+                        "typeProperties": {
+                            "connectionString": "[parameters('superfundblobstorage_connectionString')]"
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]"
+                    ]
+                },
+                {
+                    "name": "[concat(parameters('factoryName'), '/superfundtablestorage')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureTableStorage",
+                        "typeProperties": {
+                            "connectionString": "[parameters('superfundtablestorage_connectionString')]"
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]"
+                    ]
+                }
+            ]
+        }
+    ]
+}
