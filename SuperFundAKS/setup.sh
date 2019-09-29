@@ -1,18 +1,33 @@
 #!/bin/bash
 
+# Overide settings on the command line
+# ARG1 is environmentID
+# ARG2 is containerRegistryName 
+# ARG3 is keyVaultName 
+if [ $# -eq 3 ]
+then
+  environmentID=$1
+  containerRegistryName=$2
+  keyVaultName=$3
+else
+  environmentID=$RANDOM
+  containerRegistryName=superfundacr$environmentID
+  keyVaultName=superfundkv$environmentID
+fi
+
 # set execution context (if necessary)
 #az account set --subscription <replace with your subscription name or id>
 
 # Modify for your environment
-export environmentID=$RANDOM
-export keyVaultName=SuperFundKV
-export containerRegistryName=SuperFundContainerRegistry
 export servicePrincipleName=superfund-aks-sp-$environmentID
-export clusterName=SuperFundAKSCluster
+export clusterName=superfundaks$environmentID
 
-# Set the resource group name and location for your server
+# Set the resource group name and location for AKS
 export resourceGroupName=superfund-rg-aks-$environmentID
 export location=australiaeast
+
+# Create Azure Container Registry
+../SuperFundACR/setup.sh $environmentID $resourceGroupName $containerRegistryName $keyVaultName
 
 # Create a resource group
 echo "Creating resource group $resourceGroupName ..."
