@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "superfundapi.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "superfundapi.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80   
+          volumeMounts:
+            - name: kvvolume 
+              mountPath: /kv 
+              readOnly: true 
+      volumes:
+        - name: kvvolume 
+          flexVolume: 
+            driver: "azure/kv" 
+            secretRef:
+              name: kvcreds
+            options: 
+              usepodidentity: "false" 
+              keyvaultname: "SuperFundKV" 
+              keyvaultobjectnames: "SuperFundApiStorageKey" 
+              keyvaultobjecttypes: "secret" 
+              resourcegroup: "SuperfundLookupRG" 
+              subscriptionid: "{{ .Values.subscriptionid }}" 
+              tenantid: "{{ .Values.tenantid }}"
