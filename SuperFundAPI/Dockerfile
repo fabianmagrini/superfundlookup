@@ -1,8 +1,8 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:3.0 AS base
 WORKDIR /app
 
 # Copy project files and restore
-FROM microsoft/dotnet:2.2-sdk AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 WORKDIR /src
 COPY SuperFundAPI/*.csproj  SuperFundAPI/
 COPY SuperFundTableStorage/*.csproj SuperFundTableStorage/
