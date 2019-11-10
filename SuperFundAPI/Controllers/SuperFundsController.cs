@@ -17,23 +17,28 @@ namespace SuperFundAPI.Controllers
         {
             this.repository = repository;
         }
-        
-        // GET api/values
-        /* 
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            this.repository.GetList();
-            
-            //return new string[] { "value1", "value2" };
-        }
-*/
 
-        // GET api/superfunds
+        /// <summary>
+        /// List all superfunds sorted by most recently updated.
+        /// </summary>
+        /// <remarks>add pagination</remarks>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var model = await this.repository.GetList();
+
+            var outputModel = ToOutputModel(model);
+            return Ok(outputModel);
+        }
+
+        /// <summary>
+        /// Get a single superfund.
+        /// </summary>
+        /// <param name="id">The id of the superfund</param>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SuperFundOutputModel>> Get(string id)
+        {
+            var model = await this.repository.GetItem("DefaultPartitionKey", id);
 
             var outputModel = ToOutputModel(model);
             return Ok(outputModel);
