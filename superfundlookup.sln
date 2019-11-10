@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFundEventHubConsumer",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFundBlobStorage", "SuperFundBlobStorage\SuperFundBlobStorage.csproj", "{9A82245E-3074-4BAD-A23C-0511ADAD506A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFundTableStorage.Tests", "SuperFundTableStorage.Tests\SuperFundTableStorage.Tests.csproj", "{C0C8309E-7A94-4229-A878-46610731CD8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,17 @@ Global
 		{9A82245E-3074-4BAD-A23C-0511ADAD506A}.Release|x64.Build.0 = Release|Any CPU
 		{9A82245E-3074-4BAD-A23C-0511ADAD506A}.Release|x86.ActiveCfg = Release|Any CPU
 		{9A82245E-3074-4BAD-A23C-0511ADAD506A}.Release|x86.Build.0 = Release|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Debug|x64.Build.0 = Debug|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Debug|x86.Build.0 = Debug|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Release|x64.ActiveCfg = Release|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Release|x64.Build.0 = Release|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Release|x86.ActiveCfg = Release|Any CPU
+		{C0C8309E-7A94-4229-A878-46610731CD8E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
