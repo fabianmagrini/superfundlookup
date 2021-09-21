@@ -13,23 +13,15 @@ param location string = resourceGroup().location
 @description('Storage container name.')
 param containerName string = 'superfund'
 
-var storageAccountName = '${toLower(storageNamePrefix)}${uniqueString(resourceGroup().id)}'
-
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: storageAccountName
-  location: location
-  kind: 'StorageV2'
-  tags: resourceTags
-  sku: {
-    name: 'Standard_LRS'
-  }
-  properties: {
-    accessTier: 'Hot'
+// Resource: Storage Account
+module storage './storage.bicep' = {
+  name: 'storageModule'
+  params: {
+    storageNamePrefix: storageNamePrefix
+    location: location
+    containerName: containerName
+    resourceTags: resourceTags
   }
 }
 
-resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
-  name: '${storageaccount.name}/default/${containerName}'
-}
-
-output storageAccountNameOutput string = storageAccountName
+output storageAccountNameOutput string = storage.outputs.storageAccountNameOutput
