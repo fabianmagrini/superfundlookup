@@ -1,11 +1,24 @@
+@allowed([
+  'dev'
+  'prod'
+])
+@description('The prefix for the storage name.')
+param storageNamePrefix string = 'prod'
+
+var environmentSettings = {
+  dev: {
+    storageAccountSku: 'Standard_LRS'
+  }
+  prod: {
+    storageAccountSku: 'Standard_LRS'
+  }
+}
+
 @description('The tags to apply to resources.')
 param resourceTags object = {
   Environment: 'prod'
   Project: 'superfund'
 }
-
-@description('The prefix for the storage name.')
-param storageNamePrefix string = 'prod'
 
 @description('Storage location.')
 param location string = resourceGroup().location
@@ -21,7 +34,7 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   kind: 'StorageV2'
   tags: resourceTags
   sku: {
-    name: 'Standard_LRS'
+    name: environmentSettings[storageNamePrefix].storageAccountSku
   }
   properties: {
     accessTier: 'Hot'
