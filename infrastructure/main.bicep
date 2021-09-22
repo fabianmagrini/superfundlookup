@@ -34,6 +34,14 @@ module storage './storage.bicep' = {
   }
 }
 
+// Resource: Table Storage
+module tablestorage './tablestorage.bicep' = {
+  name: 'tablestorageModule'
+  params: {
+    storageAccountName: storage.outputs.storageAccountName
+  }
+}
+
 output keyVaultUri string = keyvault.outputs.keyVaultUri
 output keyVaultSkuName string = keyvault.outputs.keyVaultSkuName
 output storageAccountName string = storage.outputs.storageAccountName
