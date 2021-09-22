@@ -4,11 +4,21 @@ param resourceTags object = {
   Project: 'superfund'
 }
 
-@description('The prefix for the storage name.')
-param storageNamePrefix string = 'prod'
+@description('Environment name.')
+param environment string = 'prod'
 
-@description('Storage location.')
+@description('Environment location.')
 param location string = resourceGroup().location
+
+// Resource: Keyvault
+module keyvault './keyvault.bicep' = {
+  name: 'keyvaultModule'
+  params: {
+    environment: environment
+    location: location
+    resourceTags: resourceTags
+  }
+}
 
 @description('Storage container name.')
 param containerName string = 'superfund'
@@ -17,11 +27,13 @@ param containerName string = 'superfund'
 module storage './storage.bicep' = {
   name: 'storageModule'
   params: {
-    storageNamePrefix: storageNamePrefix
+    storageNamePrefix: environment
     location: location
     containerName: containerName
     resourceTags: resourceTags
   }
 }
 
-output storageAccountNameOutput string = storage.outputs.storageAccountNameOutput
+output keyVaultUri string = keyvault.outputs.keyVaultUri
+output keyVaultSkuName string = keyvault.outputs.keyVaultSkuName
+output storageAccountName string = storage.outputs.storageAccountNameOutput
