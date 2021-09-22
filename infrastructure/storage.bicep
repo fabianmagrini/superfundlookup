@@ -2,8 +2,8 @@
   'dev'
   'prod'
 ])
-@description('The prefix for the storage name.')
-param storageNamePrefix string = 'prod'
+@description('Environment.')
+param environment string = 'prod'
 
 var environmentSettings = {
   dev: {
@@ -26,7 +26,7 @@ param location string = resourceGroup().location
 @description('Storage container name.')
 param containerName string = 'superfund'
 
-var storageAccountName = '${toLower(storageNamePrefix)}${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'sa${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
@@ -34,7 +34,7 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   kind: 'StorageV2'
   tags: resourceTags
   sku: {
-    name: environmentSettings[storageNamePrefix].storageAccountSku
+    name: environmentSettings[environment].storageAccountSku
   }
   properties: {
     accessTier: 'Hot'
@@ -45,4 +45,4 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
   name: '${storageaccount.name}/default/${containerName}'
 }
 
-output storageAccountNameOutput string = storageAccountName
+output storageAccountName string = storageAccountName

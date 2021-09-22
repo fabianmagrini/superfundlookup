@@ -27,7 +27,7 @@ param containerName string = 'superfund'
 module storage './storage.bicep' = {
   name: 'storageModule'
   params: {
-    storageNamePrefix: environment
+    environment: environment
     location: location
     containerName: containerName
     resourceTags: resourceTags
@@ -36,4 +36,4 @@ module storage './storage.bicep' = {
 
 output keyVaultUri string = keyvault.outputs.keyVaultUri
 output keyVaultSkuName string = keyvault.outputs.keyVaultSkuName
-output storageAccountName string = storage.outputs.storageAccountNameOutput
+output storageAccountName string = storage.outputs.storageAccountName
