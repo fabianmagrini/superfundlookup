@@ -4,7 +4,7 @@ POC using Azure
 
 ## Prerequisites
 
-.Net Core 2.2
+.Net Core 2.2 (WIP converting to net5.0)
 
 ## Setup Azure Environment
 
@@ -18,6 +18,9 @@ References:
 
 <https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-cli>
 <https://docs.microsoft.com/en-us/cli/azure/storage/account?view=azure-cli-latest#az-storage-account-show>
+
+Download data from:
+<https://superfundlookup.gov.au/Tools/DownloadUsiList>
 
 ## SuperFund CLI
 
