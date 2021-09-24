@@ -2,7 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
  
 namespace SuperFundCLI
 {
@@ -23,6 +25,8 @@ namespace SuperFundCLI
         {
             try
             {   
+                DownloadFile("http://superfundlookup.gov.au/Tools/DownloadUsiList?download=true", "SflUsiExtract.txt");
+
                 using (StreamWriter outputFile = new StreamWriter("SflUsiExtract.csv"))
                 {
                     using( var sr = new FixedWidthStreamReader<SuperFundInfo>( "SflUsiExtract.txt") ) 
@@ -49,6 +53,22 @@ namespace SuperFundCLI
             {
                 _logger.LogError(e.Message);
             }
+        }
+
+        private void DownloadFile(string uri, string outputPath)
+        {
+            using (System.Net.WebClient wc = new System.Net.WebClient())
+            {
+                try
+                {
+                    wc.DownloadFile(uri, outputPath); 
+                }
+                catch (System.Exception e)
+                {
+                    _logger.LogError(e.Message);
+                }
+            }
+
         }
     }
 }
