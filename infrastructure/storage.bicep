@@ -20,13 +20,14 @@ param resourceTags object = {
   Project: 'superfund'
 }
 
-@description('Storage location.')
+@description('Storage account location.')
 param location string = resourceGroup().location
 
-@description('Storage container name.')
-param containerName string = 'superfund'
+@description('Name of the storage account.')
+param storageAccountName string = 'superfund'
 
-var storageAccountName = 'storage${toLower(environment)}${uniqueString(resourceGroup().id)}'
+@description('Name of the blob container in the Storage account.')
+param blobContainerName string = 'superfund'
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
@@ -41,8 +42,9 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 }
 
-resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
-  name: '${storageaccount.name}/default/${containerName}'
+resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
+  name: '${storageaccount.name}/default/${blobContainerName}'
 }
 
 output storageAccountName string = storageAccountName
+output blobContainerName string = blobContainerName

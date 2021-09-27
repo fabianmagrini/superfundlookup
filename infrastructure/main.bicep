@@ -20,8 +20,11 @@ module keyvault './keyvault.bicep' = {
   }
 }
 
-@description('Storage container name.')
-param containerName string = 'superfund'
+@description('Name of the storage account.')
+param storageAccountName string = 'storage${toLower(environment)}${uniqueString(resourceGroup().id)}'
+
+@description('Name of the blob container in the Storage account.')
+param blobContainerName string = 'blob${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 // Resource: Storage Account
 module storage './storage.bicep' = {
@@ -29,7 +32,8 @@ module storage './storage.bicep' = {
   params: {
     environment: environment
     location: location
-    containerName: containerName
+    storageAccountName: storageAccountName
+    blobContainerName: blobContainerName
     resourceTags: resourceTags
   }
 }
