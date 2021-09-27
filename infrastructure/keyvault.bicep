@@ -14,7 +14,7 @@ param resourceTags object = {
 @description('Resource location.')
 param location string = resourceGroup().location
 
-var keyVaultName = 'kv${toLower(environment)}${uniqueString(resourceGroup().id)}'
+var keyVaultName = 'keyvault${toLower(environment)}${uniqueString(resourceGroup().id)}'
 var tenantId = subscription().tenantId
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {

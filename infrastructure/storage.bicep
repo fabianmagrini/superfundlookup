@@ -26,7 +26,7 @@ param location string = resourceGroup().location
 @description('Storage container name.')
 param containerName string = 'superfund'
 
-var storageAccountName = 'sa${toLower(environment)}${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'storage${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
