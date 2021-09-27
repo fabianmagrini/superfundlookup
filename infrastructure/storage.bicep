@@ -17,17 +17,17 @@ var environmentSettings = {
 @description('The tags to apply to resources.')
 param resourceTags object = {
   Environment: 'prod'
-  Project: 'superfund'
+  Project: 'template'
 }
 
 @description('Storage account location.')
 param location string = resourceGroup().location
 
 @description('Name of the storage account.')
-param storageAccountName string = 'superfund'
+param storageAccountName string = 'storage${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 @description('Name of the blob container in the Storage account.')
-param blobContainerName string = 'superfund'
+param blobContainerName string = 'blob${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName

@@ -8,13 +8,15 @@ param environment string = 'prod'
 @description('The tags to apply to resources.')
 param resourceTags object = {
   Environment: 'prod'
-  Project: 'superfund'
+  Project: 'template'
 }
 
 @description('Resource location.')
 param location string = resourceGroup().location
 
-var keyVaultName = 'keyvault${toLower(environment)}${uniqueString(resourceGroup().id)}'
+@description('Name of the Key Vault.')
+param keyVaultName string = 'keyvault${toLower(environment)}${uniqueString(resourceGroup().id)}'
+
 var tenantId = subscription().tenantId
 
 resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {

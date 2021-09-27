@@ -8,7 +8,7 @@ param environment string = 'prod'
 @description('The tags to apply to resources.')
 param resourceTags object = {
   Environment: 'prod'
-  Project: 'superfund'
+  Project: 'template'
 }
 
 @description('Storage location.')

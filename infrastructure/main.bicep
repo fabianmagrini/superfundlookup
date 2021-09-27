@@ -10,12 +10,16 @@ param environment string = 'prod'
 @description('Environment location.')
 param location string = resourceGroup().location
 
+@description('Name of the Key Vault.')
+param keyVaultName string = 'keyvault${toLower(environment)}${uniqueString(resourceGroup().id)}'
+
 // Resource: Keyvault
 module keyvault './keyvault.bicep' = {
   name: 'keyvaultModule'
   params: {
     environment: environment
     location: location
+    keyVaultName: keyVaultName
     resourceTags: resourceTags
   }
 }
