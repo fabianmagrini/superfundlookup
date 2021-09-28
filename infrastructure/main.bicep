@@ -13,7 +13,6 @@ param location string = resourceGroup().location
 @description('Name of the Key Vault.')
 param keyVaultName string = 'keyvault${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
-// Resource: Keyvault
 module keyvault './keyvault.bicep' = {
   name: 'keyvaultModule'
   params: {
@@ -30,7 +29,6 @@ param storageAccountName string = 'storage${toLower(environment)}${uniqueString(
 @description('Name of the blob container in the Storage account.')
 param blobContainerName string = 'blob${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
-// Resource: Storage Account
 module storage './storage.bicep' = {
   name: 'storageModule'
   params: {
@@ -42,13 +40,26 @@ module storage './storage.bicep' = {
   }
 }
 
-// Resource: Table Storage
 module tablestorage './tablestorage.bicep' = {
   name: 'tablestorageModule'
   params: {
     storageAccountName: storage.outputs.storageAccountName
   }
 }
+
+@description('Name of the Datafactory.')
+param dataFactoryName string = 'datafactory${toLower(environment)}${uniqueString(resourceGroup().id)}'
+
+module datafactory './datafactory.bicep' = {
+  name: 'datafactoryModule'
+  params: {
+    environment: environment
+    location: location
+    dataFactoryName: dataFactoryName
+    resourceTags: resourceTags
+  }
+}
+
 
 output keyVaultUri string = keyvault.outputs.keyVaultUri
 output keyVaultSkuName string = keyvault.outputs.keyVaultSkuName

@@ -14,7 +14,8 @@ param resourceTags object = {
 @description('Storage location.')
 param location string = resourceGroup().location
 
-var dataFactoryName = 'datafactory${toLower(environment)}${uniqueString(resourceGroup().id)}'
+@description('Name of the Datafactory.')
+param dataFactoryName string = 'datafactory${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   name: dataFactoryName
