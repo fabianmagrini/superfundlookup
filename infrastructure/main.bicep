@@ -55,6 +55,8 @@ module datafactory './datafactory.bicep' = {
   params: {
     environment: environment
     location: location
+    storageAccountName: storage.outputs.storageAccountName
+    blobContainerName: blobContainerName
     dataFactoryName: dataFactoryName
     resourceTags: resourceTags
   }
