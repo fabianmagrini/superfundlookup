@@ -145,4 +145,53 @@ resource dataFactoryDataSetOut 'Microsoft.DataFactory/factories/datasets@2018-06
   }
 }
 
+var pipelineName = 'Pipeline'
+
+resource dataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+  parent: dataFactory
+  name: pipelineName
+  properties: {
+    activities: [
+      any({
+        name: 'Copy Data1'
+        type: 'Copy'
+        policy: {
+          timeout: '7.00:00:00'
+          retry: 0
+          retryIntervalInSeconds: 30
+          secureOutput: false
+          secureInput: false
+        }
+        userProperties: []
+        typeProperties: {
+          source: {
+            type: 'BlobSource'
+            recursive: true
+          }
+          sink: {
+            type: 'AzureTableSink'
+            azureTableInsertType: 'merge'
+            writeBatchSize: 10000
+          }
+          enableStaging: false
+        }
+        inputs: [
+          {
+            referenceName: dataFactoryDataSetIn.name
+            type: 'DatasetReference'
+            parameters: {}
+          }
+        ]
+        outputs: [
+          {
+            referenceName: dataFactoryDataSetOut.name
+            type: 'DatasetReference'
+            parameters: {}
+          }
+        ]
+      })
+    ]
+  }
+}
+
 output dataFactoryName string = dataFactory.name
