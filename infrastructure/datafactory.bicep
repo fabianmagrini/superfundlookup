@@ -197,11 +197,64 @@ resource tableDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   }
 }
 
-var pipelineName = 'Pipeline'
+var fetchSuperfundlookupPipelineName = 'FetchSuperfundlookup'
 
-resource pipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+resource fetchSuperfundlookupPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
   parent: dataFactory
-  name: pipelineName
+  name: fetchSuperfundlookupPipelineName
+  properties: {
+    activities: [
+      any({
+        name: 'Copy Data1'
+        type: 'Copy'
+        policy: {
+          timeout: '7.00:00:00'
+          retry: 0
+          retryIntervalInSeconds: 30
+          secureOutput: false
+          secureInput: false
+        }
+        userProperties: []
+        typeProperties: {
+          source: {
+            type: 'BinarySource'
+            storeSettings: {
+              type: 'HttpReadSettings'
+              requestMethod: 'GET'
+            }
+            formatSettings: {
+                type: 'BinaryReadSettings'
+            }
+          }
+          sink: {
+            type: 'BlobSink'
+          }
+          enableStaging: false
+        }
+        inputs: [
+          {
+            referenceName: superfundlookupDataSet.name
+            type: 'DatasetReference'
+            parameters: {}
+          }
+        ]
+        outputs: [
+          {
+            referenceName: txtDataSet.name
+            type: 'DatasetReference'
+            parameters: {}
+          }
+        ]
+      })
+    ]
+  }
+}
+
+var loadTablePipelineName = 'LoadTable'
+
+resource loadTablePipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+  parent: dataFactory
+  name: loadTablePipelineName
   properties: {
     activities: [
       any({
