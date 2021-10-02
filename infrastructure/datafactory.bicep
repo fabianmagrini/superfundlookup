@@ -41,8 +41,21 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   properties: {}
 }
 
+var superfundlookupLinkedServiceName = 'SuperfundlookupLinkedService'
 var blobStorageLinkedServiceName = 'StorageLinkedService'
 var tableStorageLinkedServiceName = 'TableStorageLinkedService'
+
+resource superfundlookupLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
+  parent: dataFactory
+  name: superfundlookupLinkedServiceName
+  properties: {
+    type: 'HttpServer'
+    typeProperties: {
+      url: 'http://superfundlookup.gov.au/Tools/DownloadUsiList?download=true'
+      authenticationType: 'Anonymous'
+    }
+  }
+}
 
 resource blobStorageLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: dataFactory
@@ -66,11 +79,31 @@ resource tableStorageLinkedService 'Microsoft.DataFactory/factories/linkedservic
   }
 }
 
-var dataFactoryDataSetInName = 'DatasetIn'
+var superfundlookupDataSetInName = 'SuperfundlookupDatasetIn'
 
-resource dataFactoryDataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+resource superfundlookupDataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: dataFactoryDataSetInName
+  name: superfundlookupDataSetInName
+  properties: {
+    linkedServiceName: {
+      referenceName: superfundlookupLinkedService.name
+      type: 'LinkedServiceReference'
+    }
+    annotations: []
+    type: 'Binary'
+    typeProperties:{  
+      location: {
+        type: 'HttpServerLocation'
+      }
+    }
+  }
+}
+
+var dataSetInName = 'DatasetIn'
+
+resource dataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+  parent: dataFactory
+  name: dataSetInName
   properties: {
     linkedServiceName: {
       referenceName: blobStorageLinkedService.name
@@ -126,11 +159,11 @@ resource dataFactoryDataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-
   }
 }
 
-var dataFactoryDataSetOutName = 'DatasetOut'
+var dataSetOutName = 'DatasetOut'
 
-resource dataFactoryDataSetOut 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+resource dataSetOut 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: dataFactoryDataSetOutName
+  name: dataSetOutName
   properties: {
     linkedServiceName: {
       referenceName: tableStorageLinkedService.name
@@ -147,7 +180,7 @@ resource dataFactoryDataSetOut 'Microsoft.DataFactory/factories/datasets@2018-06
 
 var pipelineName = 'Pipeline'
 
-resource dataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+resource pipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
   parent: dataFactory
   name: pipelineName
   properties: {
@@ -177,14 +210,14 @@ resource dataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-
         }
         inputs: [
           {
-            referenceName: dataFactoryDataSetIn.name
+            referenceName: dataSetIn.name
             type: 'DatasetReference'
             parameters: {}
           }
         ]
         outputs: [
           {
-            referenceName: dataFactoryDataSetOut.name
+            referenceName: dataSetOut.name
             type: 'DatasetReference'
             parameters: {}
           }
