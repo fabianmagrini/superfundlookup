@@ -79,11 +79,11 @@ resource tableStorageLinkedService 'Microsoft.DataFactory/factories/linkedservic
   }
 }
 
-var superfundlookupDataSetInName = 'SuperfundlookupDatasetIn'
+var superfundlookupDataSetName = 'SuperfundlookupService'
 
-resource superfundlookupDataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+resource superfundlookupDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: superfundlookupDataSetInName
+  name: superfundlookupDataSetName
   properties: {
     linkedServiceName: {
       referenceName: superfundlookupLinkedService.name
@@ -99,11 +99,30 @@ resource superfundlookupDataSetIn 'Microsoft.DataFactory/factories/datasets@2018
   }
 }
 
-var dataSetInName = 'DatasetIn'
+var txtDataSetName = 'SflUsiExtractTxt'
 
-resource dataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+resource txtDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: dataSetInName
+  name: txtDataSetName
+  properties: {
+    linkedServiceName: {
+      referenceName: blobStorageLinkedService.name
+      type: 'LinkedServiceReference'
+    }
+    annotations: []
+    type: 'AzureBlob'
+    typeProperties: {
+      fileName: 'SflUsiExtract.txt'
+      folderPath: 'superfundcontainer'
+    }
+  }
+}
+
+var csvDataSetName = 'SflUsiExtractCsv'
+
+resource csvDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+  parent: dataFactory
+  name: csvDataSetName
   properties: {
     linkedServiceName: {
       referenceName: blobStorageLinkedService.name
@@ -159,11 +178,11 @@ resource dataSetIn 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   }
 }
 
-var dataSetOutName = 'DatasetOut'
+var tableDataSetName = 'SuperfundTable'
 
-resource dataSetOut 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+resource tableDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: dataSetOutName
+  name: tableDataSetName
   properties: {
     linkedServiceName: {
       referenceName: tableStorageLinkedService.name
@@ -210,14 +229,14 @@ resource pipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
         }
         inputs: [
           {
-            referenceName: dataSetIn.name
+            referenceName: csvDataSet.name
             type: 'DatasetReference'
             parameters: {}
           }
         ]
         outputs: [
           {
-            referenceName: dataSetOut.name
+            referenceName: tableDataSet.name
             type: 'DatasetReference'
             parameters: {}
           }
