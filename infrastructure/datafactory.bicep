@@ -275,16 +275,9 @@ resource fetchSuperfundlookupPipeline 'Microsoft.DataFactory/factories/pipelines
   name: 'FetchSuperfundlookup'
   properties: {
     activities: [
-      any({
+      {
         name: 'Copy Data1'
         type: 'Copy'
-        policy: {
-          timeout: '7.00:00:00'
-          retry: 0
-          retryIntervalInSeconds: 30
-          secureOutput: false
-          secureInput: false
-        }
         userProperties: []
         typeProperties: {
           source: {
@@ -316,7 +309,31 @@ resource fetchSuperfundlookupPipeline 'Microsoft.DataFactory/factories/pipelines
             parameters: {}
           }
         ]
-      })
+      }
+      {
+        name: 'Dataflow1'
+        type: 'ExecuteDataFlow'
+        dependsOn: [
+          {
+            activity: 'Copy Data1'
+            dependencyConditions: [
+              'Succeeded'
+            ]
+          }
+        ]
+        userProperties: []
+        typeProperties: {
+          dataFlow: {
+            referenceName: 'dataflow1'
+            type: 'DataFlowReference'
+            parameters: {}
+            datasetParameters: {
+              source1: {}
+              sink1: {}
+            }
+          }
+        }
+      }
     ]
   }
 }
