@@ -41,13 +41,9 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   properties: {}
 }
 
-var superfundlookupLinkedServiceName = 'SuperfundlookupLinkedService'
-var blobStorageLinkedServiceName = 'StorageLinkedService'
-var tableStorageLinkedServiceName = 'TableStorageLinkedService'
-
 resource superfundlookupLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: dataFactory
-  name: superfundlookupLinkedServiceName
+  name: 'SuperfundlookupLinkedService'
   properties: {
     type: 'HttpServer'
     typeProperties: {
@@ -59,7 +55,7 @@ resource superfundlookupLinkedService 'Microsoft.DataFactory/factories/linkedser
 
 resource blobStorageLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: dataFactory
-  name: blobStorageLinkedServiceName
+  name: 'StorageLinkedService'
   properties: {
     type: 'AzureBlobStorage'
     typeProperties: {
@@ -70,7 +66,7 @@ resource blobStorageLinkedService 'Microsoft.DataFactory/factories/linkedservice
 
 resource tableStorageLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: dataFactory
-  name: tableStorageLinkedServiceName
+  name: 'TableStorageLinkedService'
   properties: {
     type: 'AzureTableStorage'
     typeProperties: {
@@ -79,11 +75,9 @@ resource tableStorageLinkedService 'Microsoft.DataFactory/factories/linkedservic
   }
 }
 
-var superfundlookupDataSetName = 'SuperfundlookupService'
-
 resource superfundlookupDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: superfundlookupDataSetName
+  name: 'SuperfundlookupService'
   properties: {
     linkedServiceName: {
       referenceName: superfundlookupLinkedService.name
@@ -99,11 +93,9 @@ resource superfundlookupDataSet 'Microsoft.DataFactory/factories/datasets@2018-0
   }
 }
 
-var txtDataSetName = 'SflUsiExtractTxt'
-
 resource txtDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: txtDataSetName
+  name: 'SflUsiExtractTxt'
   properties: {
     linkedServiceName: {
       referenceName: blobStorageLinkedService.name
@@ -118,11 +110,56 @@ resource txtDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   }
 }
 
-var csvDataSetName = 'SflUsiExtractCsv'
+
+resource txtSourceDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+  parent: dataFactory
+  name: 'SflUsiExtractTxtSource'
+  properties: {
+    linkedServiceName: {
+      referenceName: blobStorageLinkedService.name
+      type: 'LinkedServiceReference'
+    }
+    annotations: []
+    type: 'DelimitedText'
+    typeProperties: {
+      location: {
+        type: 'AzureBlobStorageLocation'
+        fileName: 'SflUsiExtract.txt'
+        container: 'superfundcontainer'
+      }
+      columnDelimiter: ''
+      escapeChar: '\\'
+      firstRowAsHeader: false
+      quoteChar: '"'
+    }
+  }
+}
+
+resource csvSinkDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+  parent: dataFactory
+  name: 'SflUsiExtractCsvSink'
+  properties: {
+    linkedServiceName: {
+      referenceName: blobStorageLinkedService.name
+      type: 'LinkedServiceReference'
+    }
+    annotations: []
+    type: 'DelimitedText'
+    typeProperties: {
+      location: {
+        type: 'AzureBlobStorageLocation'
+        container: 'superfundcontainer'
+      }
+      columnDelimiter: ','
+      escapeChar: '\\'
+      quoteChar: '"'
+    }
+  }
+}
 
 resource csvDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: csvDataSetName
+  name: 'SflUsiExtractCsv'
   properties: {
     linkedServiceName: {
       referenceName: blobStorageLinkedService.name
@@ -178,11 +215,9 @@ resource csvDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   }
 }
 
-var tableDataSetName = 'SuperfundTable'
-
 resource tableDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   parent: dataFactory
-  name: tableDataSetName
+  name: 'SuperfundTable'
   properties: {
     linkedServiceName: {
       referenceName: tableStorageLinkedService.name
@@ -197,11 +232,9 @@ resource tableDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
   }
 }
 
-var fetchSuperfundlookupPipelineName = 'FetchSuperfundlookup'
-
 resource fetchSuperfundlookupPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
   parent: dataFactory
-  name: fetchSuperfundlookupPipelineName
+  name: 'FetchSuperfundlookup'
   properties: {
     activities: [
       any({
@@ -250,11 +283,9 @@ resource fetchSuperfundlookupPipeline 'Microsoft.DataFactory/factories/pipelines
   }
 }
 
-var loadTablePipelineName = 'LoadTable'
-
 resource loadTablePipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
   parent: dataFactory
-  name: loadTablePipelineName
+  name: 'LoadTable'
   properties: {
     activities: [
       any({
