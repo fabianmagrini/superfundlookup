@@ -149,6 +149,7 @@ resource csvSinkDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = 
       location: {
         type: 'AzureBlobStorageLocation'
         container: 'superfundcontainer'
+        folderPath: 'datafactory'
       }
       columnDelimiter: ','
       escapeChar: '\\'
