@@ -149,7 +149,6 @@ resource csvSinkDataSet 'Microsoft.DataFactory/factories/datasets@2018-06-01' = 
       location: {
         type: 'AzureBlobStorageLocation'
         container: 'superfundcontainer'
-        folderPath: 'datafactory'
       }
       columnDelimiter: ','
       escapeChar: '\\'
@@ -266,7 +265,7 @@ resource convertFixedWidthDataflow 'Microsoft.DataFactory/factories/dataflows@20
           name: 'Select1'
         }
       ]
-      script: 'source(output(\n\t\tColumn_1 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 derive(ABN = substring(Column_1,1,12),\n\t\tFundName = substring(Column_1,13,201),\n\t\tUSI = substring(Column_1,214,21),\n\t\tProductName = substring(Column_1,235,201),\n\t\tContributionRestrictions = substring(Column_1,436,25),\n\t\tFromDate = substring(Column_1,461,11),\n\t\tToDate = substring(Column_1,472,11)) ~> DerivedColumn1\nDerivedColumn1 select(mapColumn(\n\t\tABN,\n\t\tFundName,\n\t\tUSI,\n\t\tProductName,\n\t\tContributionRestrictions,\n\t\tFromDate,\n\t\tToDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1'
+      script: 'source(output(\n\t\tColumn_1 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 derive(ABN = substring(Column_1,1,12),\n\t\tFundName = substring(Column_1,13,201),\n\t\tUSI = substring(Column_1,214,21),\n\t\tProductName = substring(Column_1,235,201),\n\t\tContributionRestrictions = substring(Column_1,436,25),\n\t\tFromDate = substring(Column_1,461,11),\n\t\tToDate = substring(Column_1,472,11)) ~> DerivedColumn1\nDerivedColumn1 select(mapColumn(\n\t\tABN,\n\t\tFundName,\n\t\tUSI,\n\t\tProductName,\n\t\tContributionRestrictions,\n\t\tFromDate,\n\t\tToDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[\'SflUsiExtract.csv\'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1'
     }
   }
 }
@@ -325,7 +324,7 @@ resource fetchSuperfundlookupPipeline 'Microsoft.DataFactory/factories/pipelines
         userProperties: []
         typeProperties: {
           dataFlow: {
-            referenceName: 'dataflow1'
+            referenceName: convertFixedWidthDataflow.name
             type: 'DataFlowReference'
             parameters: {}
             datasetParameters: {
