@@ -9,7 +9,7 @@ then
   resourceGroupName=$2
 else
   environmentID=$RANDOM
-  resourceGroupName=superfund-rg-df-$environmentID
+  resourceGroupName=superfund-rg-$environmentID
 fi
 
 # set execution context (if necessary)
@@ -17,6 +17,7 @@ fi
 
 # Modify for your environment.
 location=australiaeast
+deploymentName=superfund-$environmentID
 
 # Create a resource group
 echo "Create resource group $resourceGroupName ..."
@@ -24,6 +25,20 @@ az group create \
     --name $resourceGroupName \
     --location $location
 
-# Deploy ARM template
-echo "Deploy data factory ARM template ..."
-az group deployment create --resource-group $resourceGroupName --template-file arm_template.json --parameters @arm_template_parameters.json
+# Deploy Foundation Infrastructure
+echo "Deploy foundation Bicep template ..."
+az deployment group create \
+  --name $deploymentName \
+  --resource-group $resourceGroupName \
+  --template-file "../infrastructure/main.bicep" \
+  --parameters "../infrastructure/main.parameters.dev.json"
+
+# Deploy Datafactory Infrastructure
+environment=dev
+
+echo "Deploy data factory Bicep template ..."
+az deployment group create \
+  --name $deploymentName \
+  --resource-group $resourceGroupName \
+  --template-file "./datafactory.bicep" \
+  --parameters "{ \"environment\": { \"value\": \"dev\" } }"

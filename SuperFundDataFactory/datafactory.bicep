@@ -7,18 +7,18 @@ param environment string = 'prod'
 
 @description('The tags to apply to resources.')
 param resourceTags object = {
-  Environment: 'prod'
-  Project: 'template'
+  Environment: environment
+  Project: 'superfund'
 }
 
 @description('Storage location.')
 param location string = resourceGroup().location
 
 @description('Storage account name.')
-param storageAccountName string
+param storageAccountName string = 'storage${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
 @description('Name of the blob container in the Azure Storage account.')
-param blobContainerName string
+param blobContainerName string = 'superfundcontainer'
 
 @description('Name of the Datafactory.')
 param dataFactoryName string = 'datafactory${toLower(environment)}${uniqueString(resourceGroup().id)}'

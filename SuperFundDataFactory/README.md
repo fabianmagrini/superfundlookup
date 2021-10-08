@@ -4,8 +4,19 @@ Azure Data Factory
 
 References:
 
-* <https://docs.microsoft.com/en-us/azure/data-factory/quickstart-create-data-factory-resource-manager-template>
-* <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli>
+* <https://github.com/fabianmagrini/awesome-learn-azure#azure-data-factory>
+
+## Running CLI
+
+### Logging into the Azure CLI
+
+If you have multiple subscriptions then set subscription after completing the login.
+
+```sh
+az login
+az account list
+az account set --subscription="{SubscriptionID}"
+```
 
 ## Run deployment
 
@@ -14,20 +25,9 @@ chmod 775 setup.sh
 ./setup.sh
 ```
 
-## Validate template
+### Clean up deployment
 
 ```sh
-location=australiaeast
-az deployment validate --location $location --template-file arm_template.json --parameters @arm_template_parameters.json
+resourceGroupName=<resource group name>
+az group delete --name $resourceGroupName --yes --no-wait
 ```
-
-## Deploy template
-
-```sh
-resourceGroupName=<resource group>
-az group deployment create --resource-group $resourceGroupName --template-file arm_template.json --parameters @arm_template_parameters.json
-```
-
-## Load test data
-
-<https://github.com/fabianmagrini/df-demo>

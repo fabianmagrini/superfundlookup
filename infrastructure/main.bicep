@@ -47,22 +47,6 @@ module tablestorage './tablestorage.bicep' = {
   }
 }
 
-@description('Name of the Datafactory.')
-param dataFactoryName string = 'datafactory${toLower(environment)}${uniqueString(resourceGroup().id)}'
-
-module datafactory './datafactory.bicep' = {
-  name: 'datafactoryModule'
-  params: {
-    environment: environment
-    location: location
-    storageAccountName: storage.outputs.storageAccountName
-    blobContainerName: blobContainerName
-    dataFactoryName: dataFactoryName
-    resourceTags: resourceTags
-  }
-}
-
-
 output keyVaultUri string = keyvault.outputs.keyVaultUri
 output keyVaultSkuName string = keyvault.outputs.keyVaultSkuName
 output storageAccountName string = storage.outputs.storageAccountName
