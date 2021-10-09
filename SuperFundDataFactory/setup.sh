@@ -41,4 +41,8 @@ az deployment group create \
   --name $deploymentName \
   --resource-group $resourceGroupName \
   --template-file "./datafactory.bicep" \
-  --parameters "{ \"environment\": { \"value\": \"dev\" } }"
+  --parameters "{ \"environment\": { \"value\": \"$environment\" } }"
+
+echo "environmentClass: $environment"
+echo "environmentID: $environmentID"
+echo "resourceGroupName: $resourceGroupName"
