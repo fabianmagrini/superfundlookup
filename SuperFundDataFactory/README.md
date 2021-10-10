@@ -27,6 +27,26 @@ chmod 775 setup.sh
 ./setup.sh
 ```
 
+### Testing with what-if
+
+```sh
+chmod 775 test.sh
+./test.sh
+```
+
+### Query the outputs of the deployment
+
+```sh
+deploymentName=<deployment name>
+resourceGroupName=<resource group name>
+az deployment group show \
+  --name $deploymentName \
+  --resource-group $resourceGroupName \
+  --query properties.outputs.dataFactoryName.value
+```
+
+The --query is a [JMESPath](https://jmespath.org/) query string.
+
 ### Clean up deployment
 
 ```sh
