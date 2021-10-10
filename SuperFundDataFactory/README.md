@@ -20,6 +20,8 @@ az account set --subscription="{SubscriptionID}"
 
 ## Run deployment
 
+Runs the deployment for the foundation infrastructure and this datafactory. All the infrastructure is created in the same resource group.
+
 ```sh
 chmod 775 setup.sh
 ./setup.sh
