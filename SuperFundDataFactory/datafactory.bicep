@@ -17,6 +17,9 @@ param location string = resourceGroup().location
 @description('Storage account name.')
 param storageAccountName string = 'storage${toLower(environment)}${uniqueString(resourceGroup().id)}'
 
+@description('Resource group name for the storage account.')
+param storageResourceGroupName string = resourceGroup().name
+
 @description('Name of the blob container in the Azure Storage account.')
 param blobContainerName string = 'superfundcontainer'
 
@@ -25,10 +28,12 @@ param dataFactoryName string = 'datafactory${toLower(environment)}${uniqueString
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
+  scope: resourceGroup(storageResourceGroupName)
 }
 
 resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01'  existing = {
   name: blobContainerName
+  scope: resourceGroup(storageResourceGroupName)
 }
 
 resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
